@@ -26,3 +26,9 @@ patch = (Model) ->
       yield return
 
   return Son
+
+Mongorito       = require 'mongorito'
+Mongorito.Model = patch Mongorito.Model
+Mongorito.patch = patch
+
+module.exports = Mongorito
