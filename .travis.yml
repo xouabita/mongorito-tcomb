@@ -1,0 +1,14 @@
+language: node_js
+node_js:
+  - '5'
+  - '4'
+
+sudo: false
+addons:
+  apt:
+    sources:
+      - mongodb-upstart
+      - mongodb-3.0-precise
+    packages:
+      - mongodb-org-server
+      - mongodb-org-shell

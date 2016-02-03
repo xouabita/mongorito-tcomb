@@ -4,7 +4,7 @@
   "description": "Bring schema validation to Mongorito thanks to tcomb",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "ava tests.js"
   },
   "repository": {
     "type": "git",
@@ -30,6 +30,8 @@
     "tcomb-validation": "^2.3.0"
   },
   "devDependencies": {
-    "co": "^4.6.0"
+    "ava": "^0.11.0",
+    "co": "^4.6.0",
+    "coffee-script": "^1.10.0"
   }
 }
