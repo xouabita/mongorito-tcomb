@@ -1,0 +1,27 @@
+{
+  "name": "mongorito-tcomb",
+  "version": "1.0.0",
+  "description": "Bring schema validation to Mongorito thanks to tcomb",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xouabita/mongorito-tcomb.git"
+  },
+  "keywords": [
+    "mongo",
+    "mongodb",
+    "tcomb",
+    "DDD",
+    "orm",
+    "odm"
+  ],
+  "author": "xouabita",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/xouabita/mongorito-tcomb/issues"
+  },
+  "homepage": "https://github.com/xouabita/mongorito-tcomb#readme"
+}
