@@ -4,8 +4,8 @@ node_js:
   - '4'
 
 before_script:
-  npm i -g nyc
-  npm i -g coveralls
+  - npm i -g nyc
+  - npm i -g coveralls
 sudo: false
 compiler: clang-3.6
 env:
