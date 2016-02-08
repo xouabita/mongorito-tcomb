@@ -7,6 +7,6 @@ See `example.coffee`
 
 ## TODO
 
-- [ ] Add option for unique. Example, we want unique username.
-- [ ] Do more tests
-- [ ] Add default values
+- [x] Do more tests
+- [ ] Add code coverage
+- [ ] Add documentation

@@ -4,7 +4,7 @@
   "description": "Bring schema validation to Mongorito thanks to tcomb",
   "main": "index.js",
   "scripts": {
-    "test": "ava tests.js"
+    "test": "ava --serial tests.js"
   },
   "repository": {
     "type": "git",

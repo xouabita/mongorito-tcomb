@@ -29,3 +29,22 @@ module.exports = ->
       yield a.save()
     catch
       t.pass()
+
+  test 'Retrieve a document and modify it', (t) ->
+    yield (new Test mandatory: 'a').save()
+    a = yield Test.where('mandatory', 'a').findOne()
+    a.set 'optional', 78
+    try
+      yield a.save()
+    catch
+      t.fail()
+    t.pass()
+
+  test 'Retrieve a document and it is not validated', (t) ->
+    yield (new Test mandatory: 'a').save()
+    a = yield Test.where('mandatory').equals('a').findOne()
+    a.unset 'mandatory'
+    try
+      yield a.save()
+    catch
+      t.pass()
