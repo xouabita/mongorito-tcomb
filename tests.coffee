@@ -1,5 +1,5 @@
 test      = require 'ava'
-Mongorito = require './src/index.coffee'
+Mongorito = require './lib/index.js'
 t         = require 'tcomb-validation'
 
 class Test extends Mongorito.Model
