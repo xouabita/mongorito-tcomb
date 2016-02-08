@@ -15,13 +15,12 @@ patch = (Model) ->
       if @Schema is undefined or null then return
 
       # If the schema is not a Struct, then we raise an error
-      if @Schema.meta.kind isnt 'struct'
+      if not @Schema.meta or @Schema.meta.kind isnt 'struct'
         throw new Error 'The Schema need to be of kind Struct'
 
       # Validate props with the Schema
       val = t.validate @attributes, @Schema
-      if val.isValid() then return
-      else throw val.errors
+      throw val.errors if not val.isValid()
 
       yield return
 

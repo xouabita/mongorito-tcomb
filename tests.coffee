@@ -17,10 +17,7 @@ module.exports = ->
 
   test 'Save valid data', (t) ->
     a = new Test mandatory: 'a'
-    try
-      yield a.save()
-    catch
-      t.fail()
+    yield a.save()
     t.pass()
 
   test 'Throw on error', (t) ->
@@ -28,17 +25,14 @@ module.exports = ->
     try
       yield a.save()
     catch
-      t.pass()
+      return
+    t.fail()
 
   test 'Retrieve a document and modify it', (t) ->
     yield (new Test mandatory: 'a').save()
     a = yield Test.where('mandatory', 'a').findOne()
     a.set 'optional', 78
-    try
-      yield a.save()
-    catch
-      t.fail()
-    t.pass()
+    yield a.save()
 
   test 'Retrieve a document and it is not validated', (t) ->
     yield (new Test mandatory: 'a').save()
@@ -47,4 +41,18 @@ module.exports = ->
     try
       yield a.save()
     catch
-      t.pass()
+      return
+    t.fail()
+
+  test 'Save a Model without Schema', (t) ->
+    class NoSchema extends Mongorito.Model
+    yield (new NoSchema foo: 'bar').save()
+
+  test 'Save a Model with invalid Schema should throw', (t) ->
+    class Invalid extends Mongorito.Model
+      Schema: 'invalid'
+    try
+      yield (new Invalid foo: 'bar').save()
+    catch
+      return
+    t.fail()
