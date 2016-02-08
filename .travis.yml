@@ -3,6 +3,9 @@ node_js:
   - '5'
   - '4'
 
+before_script:
+  npm i -g nyc
+  npm i -g coveralls
 sudo: false
 addons:
   apt:
