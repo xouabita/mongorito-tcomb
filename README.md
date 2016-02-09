@@ -8,5 +8,5 @@ See `example.coffee`
 ## TODO
 
 - [x] Do more tests
-- [ ] Add code coverage
+- [x] Add code coverage
 - [ ] Add documentation
