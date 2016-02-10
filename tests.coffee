@@ -46,7 +46,10 @@ module.exports = ->
 
   test 'Save a Model without Schema', (t) ->
     class NoSchema extends Mongorito.Model
+    warnCall = no
+    console.warn = -> warnCall = yes
     yield (new NoSchema foo: 'bar').save()
+    t.fail() if not warnCall
 
   test 'Save a Model with invalid Schema should throw', (t) ->
     class Invalid extends Mongorito.Model
