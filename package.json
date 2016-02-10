@@ -1,6 +1,6 @@
 {
   "name": "mongorito-tcomb",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "description": "Bring schema validation to Mongorito thanks to tcomb",
   "main": "./lib/index.js",
   "scripts": {
