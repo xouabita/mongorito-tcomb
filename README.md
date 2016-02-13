@@ -63,3 +63,4 @@ TODOS
 -----
 
 - [ ] Add t.ID for validating ID
+- [ ] Add t.unique for unique index creation
