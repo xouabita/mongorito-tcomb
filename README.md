@@ -62,5 +62,6 @@ extend it then return the extended class.
 TODOS
 -----
 
-- [ ] Add t.ID for validating ID
-- [ ] Add t.unique for unique index creation
+- [x] Add t.ID for validating ID
+- [x] Add t.unique for unique index creation
+- [ ] Add tests + examples + doc for these two features
