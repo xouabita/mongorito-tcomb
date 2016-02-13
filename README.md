@@ -58,3 +58,8 @@ API
 
 The patch function can be useful to combine different Mongorito plugins. It take a class,
 extend it then return the extended class.
+
+TODOS
+-----
+
+- [ ] Add t.ID for validating ID
