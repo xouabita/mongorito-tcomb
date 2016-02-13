@@ -3,7 +3,7 @@ t         = require 'tcomb-validation'
 co        = require 'co'
 
 personSchema = t.struct
-  name: t.String
+  name: t.unique t.String
   surname: t.maybe t.String
   age: t.Number
 
