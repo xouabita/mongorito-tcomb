@@ -31,6 +31,7 @@
     "colors": "^1.1.2",
     "kerberos": "0.0.18",
     "mongorito": "^1.4.6",
+    "tcomb": "^2.7.0",
     "tcomb-validation": "^2.3.0"
   },
   "devDependencies": {
