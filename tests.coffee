@@ -1,19 +1,32 @@
 test      = require 'ava'
-Mongorito = require './lib/index.js'
-t         = require 'tcomb-validation'
+Mongorito = { t, Model } = require './lib/index.js'
 
-class Test extends Mongorito.Model
+class Test extends Model
 
   Schema: t.struct
     mandatory: t.String
     optional: t.maybe t.Number
 
+class User extends Model
+
+  Schema: t.struct
+    name: t.unique t.String
+    age: t.maybe t.Number
+
+class Post extends Model
+
+  Schema: t.struct
+    title: t.String
+    content: t.String
+    user: t.ID User
+
 module.exports = ->
 
   test.before -> yield Mongorito.connect 'localhost/mongorito-tcomb-tests'
-  test.after -> yield Mongorito.disconnect()
-  test.beforeEach -> yield Test.remove()
-  test.afterEach -> yield Test.remove()
+  test.after  -> yield Mongorito.disconnect()
+
+  test.beforeEach -> yield [Test.remove(), User.remove(), Post.remove()]
+  test.afterEach  -> yield [Test.remove(), Post.remove()]
 
   test 'Save valid data', (t) ->
     a = new Test mandatory: 'a'
@@ -56,6 +69,14 @@ module.exports = ->
       Schema: 'invalid'
     try
       yield (new Invalid foo: 'bar').save()
+    catch
+      return
+    t.fail()
+
+  test 'Model with unique attributes should be... unique', (t) ->
+    yield (new User name: 'xouabita').save()
+    try
+      yield (new User name: 'xouabita').save()
     catch
       return
     t.fail()
