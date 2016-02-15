@@ -31,6 +31,9 @@ patch = (Model) ->
       val = t.validate @attributes, @Schema
       throw val.errors if not val.isValid()
 
+      for k, v of @Schema.meta.props
+        yield Son.index k, unique: yes if v.meta.name is 'unique'
+
       yield return
 
   return Son
