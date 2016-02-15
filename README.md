@@ -66,7 +66,8 @@ TODOS
 - [x] Add t.unique for unique index creation
 - [x] Add tests for t.unique
 - [ ] More efficient indexing 
-- [ ] Add tests for t.ID
+- [ ] More efficient ID validation
+- [x] Add tests for t.ID
 - [x] Add example for t.unique
 - [ ] Add example for t.ID
 - [ ] Add docs for t.ID/t.unique
