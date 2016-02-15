@@ -64,4 +64,8 @@ TODOS
 
 - [x] Add t.ID for validating ID
 - [x] Add t.unique for unique index creation
-- [ ] Add tests + examples + doc for these two features
+- [x] Add tests for t.unique
+- [ ] Add tests for t.ID
+- [x] Add example for t.unique
+- [ ] Add example for t.ID
+- [ ] Add docs for t.ID/t.unique
