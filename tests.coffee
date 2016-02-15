@@ -26,7 +26,7 @@ module.exports = ->
   test.after  -> yield Mongorito.disconnect()
 
   test.beforeEach -> yield [Test.remove(), User.remove(), Post.remove()]
-  test.afterEach  -> yield [Test.remove(), Post.remove()]
+  test.afterEach  -> yield [Test.remove(), User.remove(), Post.remove()]
 
   test 'Save valid data', (t) ->
     a = new Test mandatory: 'a'
@@ -77,6 +77,51 @@ module.exports = ->
     yield (new User name: 'xouabita').save()
     try
       yield (new User name: 'xouabita').save()
+    catch
+      return
+    t.fail()
+
+  test 'Save a model with a valid ID should be OK', (t) ->
+    user = new User name: 'xouabita'
+    yield user.save()
+
+    post = new Post
+      title: 'Hello World'
+      content:
+        """
+        I have been waiting. I've been waiting all day. Waiting for Gus to send
+        one of his men to kill me. And it's you. Who do you know, who's okay
+        with using children, Jesse? Who do you know... who's allowed children
+        to be murdered... hmm? Gus!
+        """
+      user: (user.get '_id').toString()
+    try
+      yield post.save()
+    catch e
+      console.log e
+
+  test 'It should not work if the ID is invalid', (t) ->
+    post = new Post
+      title: 'Hello World'
+      content: 'Hello Hello Hello'
+      user: "sorry"
+    try
+      yield post.save()
+    catch
+      return
+    t.fail()
+
+  test 'It should not work if the ID is valid but there is no element', (t) ->
+    user = new Test mandatory: "Coucou"
+    yield user.save()
+
+    post = new Post
+      title: 'Hello World'
+      content: 'YoYoYo'
+      user: "#{user.get '_id'}"
+
+    try
+      yield post.save()
     catch
       return
     t.fail()

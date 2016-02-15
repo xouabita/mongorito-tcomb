@@ -32,6 +32,12 @@ patch = (Model) ->
       throw val.errors if not val.isValid()
 
       for k, v of @Schema.meta.props
+
+        if v.meta.name is 'ID'
+          res = yield v.meta.Model.findById "#{@.get k}"
+          unless res
+            throw new Error "No #{v.meta.Model.name} with this ID"
+
         yield @constructor.index k, unique: yes if v.meta.name is 'unique'
 
       yield return
@@ -45,10 +51,12 @@ unique = (Type) ->
 
 regexID = /^(?=[a-f\d]{24}$)(\d+[a-f]|[a-f]+\d)/i
 ID      = (Model) ->
-  t.refinement t.String, (str) ->
+  ref = t.refinement t.String, (str) ->
     return no unless regexID.test str
-    return no unless (yield Model.findById str)
     return yes
+  , "ID"
+  ref.meta.Model = Model
+  return ref
 
 Mongorito          = require 'mongorito'
 Mongorito.Model    = patch Mongorito.Model
