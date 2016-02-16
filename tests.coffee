@@ -20,13 +20,27 @@ class Post extends Model
     content: t.String
     user: t.ID User
 
+class MaybeID extends Model
+
+  Schema: t.struct
+    maybe: t.maybe t.ID User
+
+removeAll = ->
+  yield [
+    Test.remove()
+    User.remove()
+    Post.remove()
+    MaybeID.remove()
+  ]
+
+
 module.exports = ->
 
   test.before -> yield Mongorito.connect 'localhost/mongorito-tcomb-tests'
   test.after  -> yield Mongorito.disconnect()
 
-  test.beforeEach -> yield [Test.remove(), User.remove(), Post.remove()]
-  test.afterEach  -> yield [Test.remove(), User.remove(), Post.remove()]
+  test.beforeEach -> yield removeAll()
+  test.afterEach  -> yield removeAll()
 
   test 'Save valid data', (t) ->
     a = new Test mandatory: 'a'
@@ -125,3 +139,20 @@ module.exports = ->
     catch
       return
     t.fail()
+
+  test 'It should not throw if ID is maybe and there is no ID', (t) ->
+    yield (new MaybeID).save()
+
+  test 'It should throw if ID is maybe and the ID is not valid', (t) ->
+    user = new Test mandatory: 'coucou'
+    yield user.save()
+    try
+      yield (new MaybeID user: "#{user.get '_id'}").save()
+    catch
+      return
+    t.fail()
+
+  test 'It should not throw if ID is maybe and there is a valid ID', (t) ->
+    user = new User name: 'xouabita'
+    yield user.save()
+    yield (new MaybeID user: "#{user.get '_id'}").save()
