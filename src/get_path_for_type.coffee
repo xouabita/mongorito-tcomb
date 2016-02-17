@@ -21,7 +21,9 @@ module.exports = getPathForType = (type, name, currentPath = '') ->
 
       if type.meta.name is name
         return [currentPath]
-      else
-        return []
+      return []
+
+    when 'maybe'
+      return getPathForType type.meta.type, name, ("".concat currentPath)
 
     else return []
