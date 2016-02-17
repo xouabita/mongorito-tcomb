@@ -13,7 +13,10 @@ module.exports = ->
 
     paths = getPathForType type, 'Number'
 
-    t.same paths, ['a', 'c']
+    t.same paths, [
+      { path: 'a', type: tc.Number },
+      { path: 'c', type: tc.Number }
+    ]
 
   test 'It should work for Maybe', (t) ->
 
@@ -24,7 +27,10 @@ module.exports = ->
 
     paths = getPathForType type, 'Number'
 
-    t.same paths, ['a', 'c']
+    t.same paths, [
+      { path: 'a', type: tc.Number },
+      { path: 'c', type: tc.Number }
+    ]
 
   test 'It should work in a nested object', (t) ->
 
@@ -44,9 +50,9 @@ module.exports = ->
     paths = getPathForType type, 'Number'
 
     t.same paths, [
-      'a.foo'
-      'a.lol.num'
-      'b'
-      'c.num'
-      'c.may'
+      { path: 'a.foo', type: tc.Number },
+      { path: 'a.lol.num', type: tc.Number },
+      { path: 'b', type: tc.Number },
+      { path: 'c.num', type: tc.Number },
+      { path: 'c.may', type: tc.Number }
     ]

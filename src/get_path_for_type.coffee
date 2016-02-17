@@ -17,13 +17,13 @@ module.exports = getPathForType = (type, name, currentPath = '') ->
         paths = paths.concat (getPathForType v, name, (dot.concat k))
       return paths
 
+    when 'maybe'
+      return getPathForType type.meta.type, name, ("".concat currentPath)
+
     when 'irreducible', 'subtype'
 
       if type.meta.name is name
-        return [currentPath]
+        return [{path: "#{currentPath}", type}]
       return []
-
-    when 'maybe'
-      return getPathForType type.meta.type, name, ("".concat currentPath)
 
     else return []

@@ -1,5 +1,6 @@
 require 'colors'
 t = require 'tcomb-validation'
+getPathForType = require './get_path_for_type'
 
 # Simple function to patch a Mongorito.Model
 patch = (Model) ->
@@ -14,6 +15,8 @@ patch = (Model) ->
       # Warning if Schema is invalid
       if @haveSchema and (not @Schema.meta or @Schema.meta.kind isnt 'struct')
         throw new Error 'The Schema need to be of kind Struct'
+
+      if @haveSchema then @ids = getPathForType @Schema, 'ID'
 
       # Call parent constructor
       super args...
@@ -31,12 +34,12 @@ patch = (Model) ->
       val = t.validate @attributes, @Schema
       throw val.errors if not val.isValid()
 
-      for k, v of @Schema.meta.props
+      for {path, type} in @ids
+        id = @get path
+        if id and not (yield type.meta.Model.findById "#{id}")
+          throw new Error "#{path} have not a valid id"
 
-        if v.meta.name is 'ID'
-          res = yield v.meta.Model.findById "#{@.get k}"
-          unless res
-            throw new Error "No #{v.meta.Model.name} with this ID"
+      for k, v of @Schema.meta.props
 
         yield @constructor.index k, unique: yes if v.meta.name is 'unique'
 

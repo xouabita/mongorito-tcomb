@@ -125,7 +125,8 @@ module.exports = ->
       return
     t.fail()
 
-  test.serial 'It should not work if the ID is valid but there is no element', (t) ->
+  test.serial 'It should not work if the ID is valid but there is no element',
+  (t) ->
     user = new Test mandatory: "Coucou"
     yield user.save()
 
@@ -147,7 +148,7 @@ module.exports = ->
     user = new Test mandatory: 'coucou'
     yield user.save()
     try
-      yield (new MaybeID user: "#{user.get '_id'}").save()
+      yield (new MaybeID maybe: "#{user.get '_id'}").save()
     catch
       return
     t.fail()
@@ -156,4 +157,4 @@ module.exports = ->
   (t) ->
     user = new User name: 'xouabita'
     yield user.save()
-    yield (new MaybeID user: "#{user.get '_id'}").save()
+    yield (new MaybeID maybe: "#{user.get '_id'}").save()
