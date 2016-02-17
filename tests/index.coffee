@@ -1,5 +1,5 @@
 test      = require 'ava'
-Mongorito = { t, Model } = require './lib/index.js'
+Mongorito = { t, Model } = require '../lib/index.js'
 
 class Test extends Model
 
@@ -42,12 +42,12 @@ module.exports = ->
   test.beforeEach -> yield removeAll()
   test.afterEach  -> yield removeAll()
 
-  test 'Save valid data', (t) ->
+  test.serial 'Save valid data', (t) ->
     a = new Test mandatory: 'a'
     yield a.save()
     t.pass()
 
-  test 'Throw on error', (t) ->
+  test.serial 'Throw on error', (t) ->
     a = new Test optional: 56
     try
       yield a.save()
@@ -55,13 +55,13 @@ module.exports = ->
       return
     t.fail()
 
-  test 'Retrieve a document and modify it', (t) ->
+  test.serial 'Retrieve a document and modify it', (t) ->
     yield (new Test mandatory: 'a').save()
     a = yield Test.where('mandatory', 'a').findOne()
     a.set 'optional', 78
     yield a.save()
 
-  test 'Retrieve a document and it is not validated', (t) ->
+  test.serial 'Retrieve a document and it is not validated', (t) ->
     yield (new Test mandatory: 'a').save()
     a = yield Test.where('mandatory').equals('a').findOne()
     a.unset 'mandatory'
@@ -71,14 +71,14 @@ module.exports = ->
       return
     t.fail()
 
-  test 'Save a Model without Schema', (t) ->
+  test.serial 'Save a Model without Schema', (t) ->
     class NoSchema extends Mongorito.Model
     warnCall = no
     console.warn = -> warnCall = yes
     yield (new NoSchema foo: 'bar').save()
     t.fail() if not warnCall
 
-  test 'Save a Model with invalid Schema should throw', (t) ->
+  test.serial 'Save a Model with invalid Schema should throw', (t) ->
     class Invalid extends Mongorito.Model
       Schema: 'invalid'
     try
@@ -87,7 +87,7 @@ module.exports = ->
       return
     t.fail()
 
-  test 'Model with unique attributes should be... unique', (t) ->
+  test.serial 'Model with unique attributes should be... unique', (t) ->
     yield (new User name: 'xouabita').save()
     try
       yield (new User name: 'xouabita').save()
@@ -95,7 +95,7 @@ module.exports = ->
       return
     t.fail()
 
-  test 'Save a model with a valid ID should be OK', (t) ->
+  test.serial 'Save a model with a valid ID should be OK', (t) ->
     user = new User name: 'xouabita'
     yield user.save()
 
@@ -114,7 +114,7 @@ module.exports = ->
     catch e
       console.log e
 
-  test 'It should not work if the ID is invalid', (t) ->
+  test.serial 'It should not work if the ID is invalid', (t) ->
     post = new Post
       title: 'Hello World'
       content: 'Hello Hello Hello'
@@ -125,7 +125,7 @@ module.exports = ->
       return
     t.fail()
 
-  test 'It should not work if the ID is valid but there is no element', (t) ->
+  test.serial 'It should not work if the ID is valid but there is no element', (t) ->
     user = new Test mandatory: "Coucou"
     yield user.save()
 
@@ -140,10 +140,10 @@ module.exports = ->
       return
     t.fail()
 
-  test 'It should not throw if ID is maybe and there is no ID', (t) ->
+  test.serial 'It should not throw if ID is maybe and there is no ID', (t) ->
     yield (new MaybeID).save()
 
-  test 'It should throw if ID is maybe and the ID is not valid', (t) ->
+  test.serial 'It should throw if ID is maybe and the ID is not valid', (t) ->
     user = new Test mandatory: 'coucou'
     yield user.save()
     try
@@ -152,7 +152,8 @@ module.exports = ->
       return
     t.fail()
 
-  test 'It should not throw if ID is maybe and there is a valid ID', (t) ->
+  test.serial 'It should not throw if ID is maybe and there is a valid ID',
+  (t) ->
     user = new User name: 'xouabita'
     yield user.save()
     yield (new MaybeID user: "#{user.get '_id'}").save()

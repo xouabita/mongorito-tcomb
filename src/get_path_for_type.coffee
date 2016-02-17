@@ -4,7 +4,7 @@
 #   - `name`: The name of the type we are searching
 #   - `currentPath`: Useful for recursion
 #  Return: `paths`: An array of paths which match the name
-module.exports = getPathForType (type, name, currentPath = '') ->
+module.exports = getPathForType = (type, name, currentPath = '') ->
 
   currentKind = type.meta.kind
 
@@ -13,10 +13,15 @@ module.exports = getPathForType (type, name, currentPath = '') ->
     when 'struct'
       paths = []
       for k, v of type.meta.props
-        paths.push.apply (getPathForType v, name, (currentPath.concat k))
+        dot   = currentPath.concat (if currentPath then '.' else '')
+        paths = paths.concat (getPathForType v, name, (dot.concat k))
       return paths
 
-    when 'irreductible', 'subtype'
+    when 'irreducible', 'subtype'
 
       if type.meta.name is name
         return [currentPath]
+      else
+        return []
+
+    else return []

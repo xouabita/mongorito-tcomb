@@ -4,8 +4,8 @@
   "description": "Bring schema validation to Mongorito thanks to tcomb",
   "main": "./lib/index.js",
   "scripts": {
-    "build": "./node_modules/coffee-script/bin/coffee -o ./lib/index.js -c src/index.coffee",
-    "test": "nyc ava --serial tests.js",
+    "build": "./node_modules/coffee-script/bin/coffee -o lib -c src",
+    "test": "nyc ava tests.js",
     "coveralls": "nyc report --reporter=text-lcov | coveralls",
     "prepublish": "npm run build"
   },
