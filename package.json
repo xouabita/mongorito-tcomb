@@ -29,6 +29,7 @@
   "homepage": "https://github.com/xouabita/mongorito-tcomb#readme",
   "dependencies": {
     "colors": "^1.1.2",
+    "get-value": "^2.0.3",
     "kerberos": "0.0.18",
     "mongorito": "^1.4.6",
     "tcomb": "^2.7.0",

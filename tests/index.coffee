@@ -25,6 +25,11 @@ class MaybeID extends Model
   Schema: t.struct
     maybe: t.maybe t.ID User
 
+class ListID extends Model
+
+  Schema: t.struct
+    users: t.list t.ID User
+
 removeAll = ->
   yield [
     Test.remove()
@@ -158,3 +163,21 @@ module.exports = ->
     user = new User name: 'xouabita'
     yield user.save()
     yield (new MaybeID maybe: "#{user.get '_id'}").save()
+
+  test.serial 'It should work if there is a list of valid ID', (t) ->
+    a = new User name: 'xouabita'
+    b = new User name: 'yeems'
+    yield [a.save(), b.save()]
+
+    yield (new ListID users: ["#{a.get '_id'}", "#{b.get '_id'}"]).save()
+
+  test.serial 'It should fail if there is an invalid ID in the list', (t) ->
+    a = new User name: 'xouabita'
+    b = new Test mandatory: 'noooooooo'
+    yield [a.save(), b.save()]
+
+    try
+      yield (new ListID users: ["#{a.get '_id'}", "#{b.get '_id'}"]).save()
+    catch
+      return
+    t.fail()

@@ -1,6 +1,7 @@
 require 'colors'
 t = require 'tcomb-validation'
 getPathForType = require './get_path_for_type'
+extractLists   = require './extract_lists'
 
 # Simple function to patch a Mongorito.Model
 patch = (Model) ->
@@ -26,18 +27,23 @@ patch = (Model) ->
       super() # Don't forget to run config of the Mother
       @before 'save', 'validate'
 
-    validate: ->
+    validateIDs: ->
+      ids = extractLists @attributes, @ids
 
+      for {path, type} in ids
+        id = @get path
+        if id and not (yield type.meta.Model.findById "#{id}")
+          console.log id
+          throw new Error "#{path} have not a valid id"
+
+    validate: ->
       return if not @haveSchema
 
       # Validate props with the Schema
       val = t.validate @attributes, @Schema
       throw val.errors if not val.isValid()
 
-      for {path, type} in @ids
-        id = @get path
-        if id and not (yield type.meta.Model.findById "#{id}")
-          throw new Error "#{path} have not a valid id"
+      yield @validateIDs()
 
       for k, v of @Schema.meta.props
 
