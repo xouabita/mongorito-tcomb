@@ -56,3 +56,16 @@ module.exports = ->
       { path: 'c.num', type: tc.Number },
       { path: 'c.may', type: tc.Number }
     ]
+
+  test 'It should work with list of Number', (t) ->
+
+    type = tc.struct
+      a: tc.list tc.struct
+        foo: tc.String
+        bar: tc.Number
+
+    paths = getPathForType type, 'Number'
+
+    t.same paths, [
+      { path: 'a.0.bar', type: tc.Number }
+    ]

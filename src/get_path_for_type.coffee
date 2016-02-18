@@ -20,6 +20,10 @@ module.exports = getPathForType = (type, name, currentPath = '') ->
     when 'maybe'
       return getPathForType type.meta.type, name, ("".concat currentPath)
 
+    when 'list'
+      dot = currentPath.concat (if currentPath then '.' else '')
+      return getPathForType type.meta.type, name, (dot.concat '0')
+
     when 'irreducible', 'subtype'
 
       if type.meta.name is name
