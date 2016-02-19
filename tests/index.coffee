@@ -47,6 +47,13 @@ removeAll = ->
     NestedList.remove()
   ]
 
+  yield [
+    Test._collection().dropIndexes()
+    User._collection().dropIndexes()
+    Post._collection().dropIndexes()
+    MaybeID._collection().dropIndexes()
+  ]
+
 
 module.exports = ->
 
