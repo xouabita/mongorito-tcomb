@@ -53,15 +53,9 @@ removeAll = ->
     User._collection().dropIndexes()
     Post._collection().dropIndexes()
     MaybeID._collection().dropIndexes()
+    ListID._collection().dropIndexes()
+    NestedList._collection().dropIndexes()
   ]
-
-  yield [
-    Test._collection().dropIndexes()
-    User._collection().dropIndexes()
-    Post._collection().dropIndexes()
-    MaybeID._collection().dropIndexes()
-  ]
-
 
 module.exports = ->
 
