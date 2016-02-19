@@ -1,4 +1,4 @@
-Mongorito = {t} = require './src/index.coffee'
+Mongorito = {t} = require '../src/index'
 co        = require 'co'
 
 class User extends Mongorito.Model

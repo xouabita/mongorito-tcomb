@@ -1,4 +1,4 @@
-Mongorito = require './src/index.coffee'
+Mongorito = require '../src/index'
 t         = require 'tcomb-validation'
 co        = require 'co'
 
