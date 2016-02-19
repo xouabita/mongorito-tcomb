@@ -26,6 +26,7 @@ patch = (Model) ->
     configure: ->
       super() # Don't forget to run config of the Mother
       @before 'save', 'validate'
+      @before 'save', 'ensureUnique'
 
     validateIDs: ->
       ids = extractLists @attributes, @ids
@@ -35,7 +36,20 @@ patch = (Model) ->
         if id and not (yield type.meta.Model.findById "#{id}")
           throw new Error "#{path} have not a valid id"
 
-    validate: ->
+    ensureUnique: (next) ->
+      uniques = getPathForType @Schema, 'unique'
+
+      yield @constructor.index path, unique: yes for {path, type} in uniques
+
+      # Delete this hook
+      for hook, i in @_hooks.before.save
+        if hook is @ensureUnique
+          delete @_hooks.before.save[i]
+          break
+
+      yield next
+
+    validate: (next) ->
       return if not @haveSchema
 
       # Validate props with the Schema
@@ -44,11 +58,7 @@ patch = (Model) ->
 
       yield @validateIDs()
 
-      for k, v of @Schema.meta.props
-
-        yield @constructor.index k, unique: yes if v.meta.name is 'unique'
-
-      yield return
+      yield next
 
   return Son
 
