@@ -30,6 +30,13 @@ class ListID extends Model
   Schema: t.struct
     users: t.list t.ID User
 
+class NestedList extends Model
+
+  Schema: t.struct
+    comments: t.list t.struct
+      content: t.String
+      likes: t.list t.ID User
+
 removeAll = ->
   yield [
     Test.remove()
@@ -178,6 +185,27 @@ module.exports = ->
 
     try
       yield (new ListID users: ["#{a.get '_id'}", "#{b.get '_id'}"]).save()
+    catch
+      return
+    t.fail()
+
+  test.serial 'It should work with nested list', (t) ->
+
+    a = new User name: 'xouabita'
+    b = new Test mandatory: 'nooooo'
+    c = new User name: 'jabita'
+    yield [a.save(), b.save(), c.save()]
+    nl = new NestedList
+      comments: [
+        content: 'foobarlol'
+        likes: [ "#{a.get '_id'}", "#{c.get '_id'}" ]
+      ]
+    yield nl.save()
+    nl.set 'comments.1',
+      content: 'mdrbar'
+      likes [ a.get '_id', b.get '_id' ]
+    try
+      yield nl.save()
     catch
       return
     t.fail()

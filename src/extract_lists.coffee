@@ -8,7 +8,9 @@ module.exports = extractLists = (attrs, paths) ->
   lists   = []
 
   for {path, type} in paths
-    if path.indexOf '.0' isnt -1
+    [test] = path.split '.0'
+    if test isnt path
+      console.log path
       lists.push {path, type}
     else
       noLists.push {path, type}
@@ -27,7 +29,7 @@ module.exports = extractLists = (attrs, paths) ->
     unless after
       noLists.push path for path in newPaths
     else
-      for attr in newAttrs
-        noLists = noLists.concat (extractList attr, {path: after, type})
+      for elt in newAttrs
+        noLists = noLists.concat (extractLists elt, {path: after, type})
 
   return noLists

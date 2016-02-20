@@ -33,7 +33,6 @@ patch = (Model) ->
       for {path, type} in ids
         id = @get path
         if id and not (yield type.meta.Model.findById "#{id}")
-          console.log id
           throw new Error "#{path} have not a valid id"
 
     validate: ->
