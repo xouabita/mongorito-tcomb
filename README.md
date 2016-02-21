@@ -107,10 +107,25 @@ For **coffeescript**, you can see [`examples`](https://github.com/xouabita/mongo
 API
 ---
 
-### `patch: (Model) -> PatchedModel`
+### Mixins
+
+#### `patch: (Model) -> PatchedModel`
 
 The patch function can be useful to combine different Mongorito plugins. It take a class,
 extend it then return the extended class.
+
+### Customs tcomb types
+
+#### `t.unique`
+
+It ensure that the type is unique in the database.  
+**Usage:** `t.unique(T)` where T is any tcomb type
+
+#### `t.ID`
+
+It represent the ID of an element in the database.  
+**Usage:** `t.ID(M)` where M is a Mongorito model  
+It ensure that ID is valid and exist in the database
 
 TODOS
 -----
@@ -123,5 +138,5 @@ TODOS
 - [x] Add tests for t.ID
 - [x] Add example for t.unique
 - [x] Add example for t.ID
-- [ ] Add docs for t.ID/t.unique
+- [x] Add docs for t.ID/t.unique
 - [x] Find recursively t.ID/t.unique
