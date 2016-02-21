@@ -43,6 +43,8 @@ removeAll = ->
     User.remove()
     Post.remove()
     MaybeID.remove()
+    ListID.remove()
+    NestedList.remove()
   ]
 
 
@@ -121,10 +123,7 @@ module.exports = ->
         to be murdered... hmm? Gus!
         """
       user: (user.get '_id').toString()
-    try
-      yield post.save()
-    catch e
-      console.log e
+    yield post.save()
 
   test.serial 'It should not work if the ID is invalid', (t) ->
     post = new Post
@@ -203,7 +202,7 @@ module.exports = ->
     yield nl.save()
     nl.set 'comments.1',
       content: 'mdrbar'
-      likes [ a.get '_id', b.get '_id' ]
+      likes: [ "#{a.get '_id'}", "#{b.get '_id'}" ]
     try
       yield nl.save()
     catch

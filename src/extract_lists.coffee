@@ -10,7 +10,6 @@ module.exports = extractLists = (attrs, paths) ->
   for {path, type} in paths
     [test] = path.split '.0'
     if test isnt path
-      console.log path
       lists.push {path, type}
     else
       noLists.push {path, type}
