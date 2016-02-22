@@ -1,5 +1,25 @@
-# mongorito-tcomb [![Build Status](https://travis-ci.org/xouabita/mongorito-tcomb.svg?branch=master)](https://travis-ci.org/xouabita/mongorito-tcomb) [![Dependency Status](https://david-dm.org/xouabita/mongorito-tcomb.svg)](https://david-dm.org/xouabita/mongorito-tcomb) [![devDependency Status](https://david-dm.org/alanshaw/david/dev-status.svg)](https://david-dm.org/alanshaw/david#info=devDependencies) [![Coverage Status](https://coveralls.io/repos/github/xouabita/mongorito-tcomb/badge.svg?branch=master)](https://coveralls.io/github/xouabita/mongorito-tcomb?branch=master)
-Bring schema validation to Mongorito thanks to tcomb
+<h1 align="center">Mongorito Tcomb</h1>
+<p align="center">
+  <a href="https://travis-ci.org/xouabita/mongorito-tcomb">
+    <img src="https://travis-ci.org/xouabita/mongorito-tcomb.svg?branch=master" />
+  </a>
+  <a href="https://david-dm.org/xouabita/mongorito-tcomb">
+    <img src="https://david-dm.org/xouabita/mongorito-tcomb.svg" />
+  </a>
+  <a href="https://david-dm.org/xouabita/mongorito-tcomb/">
+    <img src="https://david-dm.org/xouabita/mongorito-tcomb/dev-status.svg"
+  </a>
+  <a href="https://coveralls.io/github/xouabita/mongorito-tcomb?branch=master">
+    <img src="https://coveralls.io/repos/github/xouabita/mongorito-tcomb/badge.svg?branch=master" />
+  </a>
+  <a href="https://codeclimate.com/github/xouabita/mongorito-tcomb">
+    <img src="https://codeclimate.com/github/xouabita/mongorito-tcomb/badges/gpa.svg" />
+  </a>
+</p>
+
+<h4 align="center"><i>Bring schema validation to Mongorito thanks to tcomb</i></h4>
+
+---
 
 Install
 -------
