@@ -130,13 +130,4 @@ It ensure that ID is valid and exist in the database
 TODOS
 -----
 
-- [x] Add t.ID for validating ID
-- [x] Add t.unique for unique index creation
-- [x] Add tests for t.unique
-- [x] More efficient indexing 
-- [x] More efficient ID validation
-- [x] Add tests for t.ID
-- [x] Add example for t.unique
-- [x] Add example for t.ID
-- [x] Add docs for t.ID/t.unique
-- [x] Find recursively t.ID/t.unique
+- [ ] More human exceptions
