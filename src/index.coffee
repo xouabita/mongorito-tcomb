@@ -2,6 +2,7 @@ require 'colors'
 t = require 'tcomb-validation'
 getPathForType = require './get_path_for_type'
 extractLists   = require './extract_lists'
+co = require 'co'
 
 # Simple function to patch a Mongorito.Model
 patch = (Model) ->
@@ -25,10 +26,11 @@ patch = (Model) ->
     # Add a simple hook when saving which will validate the data
     configure: ->
       super() # Don't forget to run config of the Mother
+      if not @Schema then return
       @before 'save', 'validate'
       @before 'save', 'ensureUnique'
 
-    validateIDs: ->
+    validateIDs: co.wrap ->
       ids = extractLists @attributes, @ids
 
       for {path, type} in ids
@@ -36,7 +38,7 @@ patch = (Model) ->
         if id and not (yield type.meta.Model.findById "#{id}")
           throw new Error "#{path} have not a valid id"
 
-    ensureUnique: (next) ->
+    ensureUnique: co.wrap ->
       uniques = getPathForType @Schema, 'unique'
 
       yield @constructor.index path, unique: yes for {path, type} in uniques
@@ -47,18 +49,12 @@ patch = (Model) ->
           delete @_hooks.before.save[i]
           break
 
-      yield next
+    validate: co.wrap ->
 
-    validate: (next) ->
-      return if not @haveSchema
-
-      # Validate props with the Schema
-      val = t.validate @attributes, @Schema
+      val = t.validate @get(), @Schema
       throw val.errors if not val.isValid()
 
       yield @validateIDs()
-
-      yield next
 
   return Son
 
