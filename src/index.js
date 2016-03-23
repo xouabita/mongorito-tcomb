@@ -8,7 +8,7 @@ var co             = require('co')
 
 function patch(Model) {
   class Son extends Model {
-    constructor() {
+    constructor(...args) {
       this.haveShema = Boolean(this.Schema)
       if (!this.haveShema)
         console.warn("[Warning] No Schema!".yellow)
@@ -18,7 +18,7 @@ function patch(Model) {
       if (this.haveShema)
         this.ids = getPathForType(this.Schema, 'ID')
 
-      super.apply(this, arguments)
+      super(...args)
     }
 
     configure() {

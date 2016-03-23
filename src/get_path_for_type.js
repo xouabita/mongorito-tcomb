@@ -3,7 +3,7 @@ function getPathForType (type, name, currentPath = '') {
   var currentKind = type.meta.kind
   var dot = ''
   if (currentPath)
-    dot = '.'
+    dot = currentPath.concat('.')
 
   switch (currentKind) {
     case 'struct':
@@ -17,12 +17,12 @@ function getPathForType (type, name, currentPath = '') {
       return paths
 
     case 'maybe':
-      return getPathForType(type.mea.type, name, "".concat(currentPath))
+      return getPathForType(type.meta.type, name, "".concat(currentPath))
 
     case 'list':
       return getPathForType(type.meta.type, name, (dot.concat('0')))
 
-    case 'irreductible':
+    case 'irreducible':
     case 'subtype':
       if (type.meta.name === name)
         return [{path: "" + currentPath, type}]

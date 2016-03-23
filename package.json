@@ -6,7 +6,8 @@
   "scripts": {
     "build": "babel src -d lib",
     "pretest": "npm run build",
-    "test": "nyc ava tests.js",
+    "prepublish": "npm run build",
+    "test": "nyc ava",
     "coveralls": "nyc report --reporter=text-lcov | coveralls"
   },
   "repository": {
