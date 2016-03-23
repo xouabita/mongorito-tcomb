@@ -4,10 +4,10 @@
   "description": "Bring schema validation to Mongorito thanks to tcomb",
   "main": "./lib/index.js",
   "scripts": {
-    "build": "./node_modules/coffee-script/bin/coffee -o lib -c src",
+    "build": "babel src -d lib",
+    "pretest": "npm run build",
     "test": "nyc ava tests.js",
-    "coveralls": "nyc report --reporter=text-lcov | coveralls",
-    "prepublish": "npm run build"
+    "coveralls": "nyc report --reporter=text-lcov | coveralls"
   },
   "repository": {
     "type": "git",
@@ -27,7 +27,20 @@
     "url": "https://github.com/xouabita/mongorito-tcomb/issues"
   },
   "homepage": "https://github.com/xouabita/mongorito-tcomb#readme",
+  "babel": {
+    "presets": [
+      "es2015-node5",
+      "stage-0"
+    ],
+    "env": {
+      "development": {
+        "sourceMaps": "inline"
+      }
+    }
+  },
   "dependencies": {
+    "babel-preset-es2015-node5": "^1.2.0",
+    "babel-preset-stage-0": "^6.5.0",
     "co": "^4.6.0",
     "colors": "^1.1.2",
     "get-value": "^2.0.3",
@@ -38,8 +51,7 @@
   },
   "devDependencies": {
     "ava": "^0.13.0",
-    "co": "^4.6.0",
-    "coffee-script": "^1.10.0",
+    "babel-cli": "^6.6.5",
     "coveralls": "^2.11.6"
   }
 }

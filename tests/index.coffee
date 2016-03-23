@@ -59,7 +59,9 @@ removeAll = ->
 
 module.exports = ->
 
-  test.before -> yield Mongorito.connect 'localhost/mongorito-tcomb-tests'
+  test.before ->
+    yield Mongorito.connect 'localhost/mongorito-tcomb-tests'
+    console.log Test
   test.after  -> yield Mongorito.disconnect()
 
   test.beforeEach -> yield removeAll()
