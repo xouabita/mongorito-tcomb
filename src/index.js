@@ -9,6 +9,7 @@ var co             = require('co')
 function patch(Model) {
   class Son extends Model {
     constructor(...args) {
+      super(...args)
       this.haveShema = Boolean(this.Schema)
       if (!this.haveShema)
         console.warn("[Warning] No Schema!".yellow)
@@ -17,8 +18,6 @@ function patch(Model) {
         throw new Error('The Schema need to be of kind struct')
       if (this.haveShema)
         this.ids = getPathForType(this.Schema, 'ID')
-
-      super(...args)
     }
 
     configure() {
@@ -33,7 +32,7 @@ function patch(Model) {
       var ids = extractLists(this.attributes, this.ids)
 
       for (var {path, type} in ids) {
-        id = this.get(path)
+        var id = this.get(path)
         if (id && !(await type.meta.Model.findById("" + id)))
           throw new Error(`${path} have not a valid ID`)
       }
@@ -58,7 +57,7 @@ function patch(Model) {
       var val = t.validate(this.get(), this.Schema)
       if (!val.isValid())
         throw val.errors
-      return await this.validateIds()
+      return true// await this.validateIds()
     }
   }
 
@@ -82,7 +81,7 @@ function ID(Model) {
   return ref
 }
 
-let Mongorito      = require('mongorito')
+var Mongorito      = require('mongorito')
 Mongorito.Model    = patch(Mongorito.Model)
 Mongorito.patch    = patch
 Mongorito.t        = require('tcomb')
