@@ -31,7 +31,7 @@ function patch(Model) {
     async validateIds() {
       var ids = extractLists(this.attributes, this.ids)
 
-      for (var {path, type} in ids) {
+      for (var {path, type} of ids) {
         var id = this.get(path)
         if (id && !(await type.meta.Model.findById("" + id)))
           throw new Error(`${path} have not a valid ID`)
@@ -57,7 +57,7 @@ function patch(Model) {
       var val = t.validate(this.get(), this.Schema)
       if (!val.isValid())
         throw val.errors
-      return true// await this.validateIds()
+      return await this.validateIds()
     }
   }
 

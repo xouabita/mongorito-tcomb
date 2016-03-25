@@ -7,22 +7,23 @@ function extractLists(attrs, paths) {
   for (var {path, type} of paths) {
     var [test] = path.split('.0')
     if (test !== path)
-      list.push({path, type})
+      lists.push({path, type})
     else
       noLists.push({path, type})
   }
 
-  for (var {path, type} of paths) {
+  for (var {path, type} of lists) {
     var [before, after] = path.split('.0', 2)
     var arr = get(attrs, before)
 
     var newPaths = []
     var newAttrs = []
 
-    arr.forEach((elt, i) => {
+    for (var i = 0, len_ = arr.length; i < len_; ++i) {
+      var elt = arr[i]
       newPaths.push({path: `${before}.${i}`, type })
       newAttrs.push(elt)
-    })
+    }
 
     if (!after)
       for (var path of newPaths)
