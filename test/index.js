@@ -53,6 +53,14 @@ class Post extends Model {
   }
 }
 
+class ListID extends Model {
+  get Schema() {
+    return t.struct({
+      users: t.list(t.ID(User))
+    })
+  }
+}
+
 async function removeAll() {
   await Promise.all([
     Test.remove(),
@@ -206,6 +214,33 @@ test('It should throw if ID is maybe and the ID is not valid', async t => {
   await user.save()
   try {
     await (new MaybeID({maybe: `${user.get('_id')}`})).save()
+  } catch (e) {
+    return
+  }
+  t.fail()
+})
+
+test('It should not throw if ID is maybe and there is a valid ID', async t => {
+  var user = new User({name: 'foo'})
+  await user.save()
+  await (new MaybeID({maybe: `${user.get('_id')}`})).save()
+})
+
+test('It should work if there is a list of valid ID', async t => {
+  var a = new User({name: 'xou'})
+  var b = new User({name: 'yeems'})
+  await Promise.all([a.save(), b.save()])
+
+  await (new ListID({users: [`${a.get('_id')}`, `${b.get('_id')}`]})).save()
+})
+
+test('It should fail if there is an invalid ID in the list', async t => {
+  var a = new User({name: 'calimero'})
+  var b = new Test({mandatory: 'noooooooo'})
+  await Promise.all([a.save(), b.save()])
+
+  try {
+    await (new ListID({users: [`${a.get('_id')}`, `${b.get('_id')}`]})).save()
   } catch (e) {
     return
   }
