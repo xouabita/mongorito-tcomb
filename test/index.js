@@ -61,6 +61,17 @@ class ListID extends Model {
   }
 }
 
+class NestedList extends Model {
+  get Schema() {
+    return t.struct({
+      comments: t.list(t.struct({
+        content: t.String,
+        likes: t.list(t.ID(User))
+      }))
+    })
+  }
+}
+
 async function removeAll() {
   await Promise.all([
     Test.remove(),
@@ -68,7 +79,9 @@ async function removeAll() {
     NoSchema.remove(),
     Invalid.remove(),
     User.remove(),
-    MaybeID.remove()
+    MaybeID.remove(),
+    ListID.remove(),
+    NestedList.remove()
   ])
 
   try {
@@ -78,7 +91,9 @@ async function removeAll() {
       NoSchema._collection().dropIndexes(),
       Invalid._collection().dropIndexes(),
       User._collection().dropIndexes(),
-      MaybeID._collection().dropIndexes()
+      MaybeID._collection().dropIndexes(),
+      ListID._collection().dropIndexes(),
+      NestedList._collection().dropIndexes()
     ])
   } catch (e) {}
 }
@@ -241,6 +256,30 @@ test('It should fail if there is an invalid ID in the list', async t => {
 
   try {
     await (new ListID({users: [`${a.get('_id')}`, `${b.get('_id')}`]})).save()
+  } catch (e) {
+    return
+  }
+  t.fail()
+})
+
+test('It should work with nested list', async t => {
+  var a = new User({name: 'qux'})
+  var b = new Test({mandatory: 'nooooo'})
+  var c = new User({name: 'jabita'})
+  await Promise.all([a.save(), b.save(), c.save()])
+  var nl = new NestedList({
+    comments: [{
+      content: 'foobarlol',
+      likes: [`${a.get('_id')}`, `${c.get('_id')}`]
+    }]
+  })
+  await nl.save()
+  nl.set('comments.1', {
+    content: 'mdrbar',
+    likes: [`${a.get('_id')}`, `${b.get('_id')}`]
+  })
+  try {
+    await nl.save()
   } catch (e) {
     return
   }

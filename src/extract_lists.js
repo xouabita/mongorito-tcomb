@@ -30,7 +30,7 @@ function extractLists(attrs, paths) {
         noLists.push(path)
     else
       for (var elt of newAttrs)
-        noLists = noLists.concat(extractLists(elt, {path: after, type}))
+        noLists = noLists.concat(extractLists(elt, [{path: after, type}]))
   }
 
   return noLists
