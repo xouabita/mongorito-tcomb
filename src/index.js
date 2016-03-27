@@ -1,10 +1,6 @@
 "use strict"
-require('colors')
-
-var t              = require('tcomb-validation')
-var getPathForType = require('./get_path_for_type')
-var extractLists   = require('./extract_lists')
-var co             = require('co')
+import 'colors'
+import t from 'tcomb-validation'
 
 function patch(Model) {
   class Son extends Model {
@@ -16,8 +12,6 @@ function patch(Model) {
       if (this.haveShema &&
                (!this.Schema.meta || this.Schema.meta.kind !== 'struct'))
         throw new Error('The Schema need to be of kind struct')
-      if (this.haveShema)
-        this.ids = getPathForType(this.Schema, 'ID')
     }
 
     configure() {
@@ -25,22 +19,6 @@ function patch(Model) {
       if (!this.Schema)
         return
       this.before('save', 'validate')
-      this.before('save', 'ensureUnique')
-    }
-
-    async ensureUnique() {
-      var uniques = getPathForType(this.Schema, 'unique')
-      for (var {path, type} of uniques) {
-        await this.constructor.index(path, {unique: true})
-      }
-
-      for (var i = 0, len_ = this._hooks.before.save.length; i < len_; i++) {
-        var hook = this._hooks.before.save[i]
-        if (hook === this.ensureUnique) {
-          delete this._hooks.before.save[i]
-          break
-        }
-      }
     }
 
     async validate() {
@@ -50,17 +28,12 @@ function patch(Model) {
         throw val.errors
 
       for (var validator of this.asyncValidations) {
-        if (!(await validator()))
-          throw new Error(validator.msgError)
+        await validator()
       }
     }
   }
 
   return Son
-}
-
-function unique(Type) {
-  return t.refinement(Type, () => true, 'unique')
 }
 
 var regexID = /^(?=[a-f\d]{24}$)(\d+[a-f]|[a-f]+\d)/i
@@ -82,7 +55,6 @@ var Mongorito      = require('mongorito')
 Mongorito.Model    = patch(Mongorito.Model)
 Mongorito.patch    = patch
 Mongorito.t        = require('tcomb')
-Mongorito.t.unique = unique
 Mongorito.t.ID     = ID
 
 module.exports = Mongorito

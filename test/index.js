@@ -21,7 +21,7 @@ class Invalid extends Model {
 class User extends Model {
   get Schema() {
     return t.struct({
-      name: t.unique(t.String),
+      name: t.String,
       age: t.maybe(t.Number)
     })
   }
@@ -30,7 +30,7 @@ class User extends Model {
 class TestUnique extends Model {
   get Schema() {
     return t.struct({
-      name: t.unique(t.String)
+      name: t.String
     })
   }
 }
@@ -101,6 +101,8 @@ async function removeAll() {
 test.before(async () => {
   await Mongorito.connect('localhost/mongorito-tcomb-tests')
   await removeAll()
+  await User.index('name', {unique: true})
+  await TestUnique.index('name', {unique: true})
 })
 
 test.after(async () => {
