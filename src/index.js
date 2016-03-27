@@ -6,10 +6,10 @@ function patch(Model) {
   class Son extends Model {
     constructor(...args) {
       super(...args)
-      this.haveShemama = Boolean(this.Schema)
-      if (!this.haveShema)
+      this.haveSchema = Boolean(this.Schema)
+      if (!this.haveSchema)
         console.warn("[Warning] No Schema!".yellow)
-      if (this.haveShema &&
+      if (this.haveSchema &&
                (!this.Schema.meta || this.Schema.meta.kind !== 'struct'))
         throw new Error('The Schema need to be of kind struct')
     }
