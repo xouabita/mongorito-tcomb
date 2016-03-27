@@ -1,6 +1,6 @@
 {
   "name": "mongorito-tcomb",
-  "version": "1.0.0",
+  "version": "2.0.0-alpha.1",
   "description": "Bring schema validation to Mongorito thanks to tcomb",
   "main": "./lib/index.js",
   "scripts": {
@@ -38,6 +38,9 @@
         "sourceMaps": "inline"
       }
     }
+  },
+  "publishConfig": {
+    "tag": "next"
   },
   "ava": {
     "babel": "inherit"
