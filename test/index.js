@@ -38,7 +38,7 @@ class TestUnique extends Model {
 class MaybeID extends Model {
   get Schema() {
     return t.struct({
-      maybe: t.maybe(t.ID(User))
+      maybe: t.maybe(t.ID(this, User))
     })
   }
 }
@@ -48,7 +48,7 @@ class Post extends Model {
     return t.struct({
       title: t.String,
       content: t.String,
-      user: t.ID(User)
+      user: t.ID(this, User)
     })
   }
 }
@@ -56,7 +56,7 @@ class Post extends Model {
 class ListID extends Model {
   get Schema() {
     return t.struct({
-      users: t.list(t.ID(User))
+      users: t.list(t.ID(this, User))
     })
   }
 }
@@ -66,7 +66,7 @@ class NestedList extends Model {
     return t.struct({
       comments: t.list(t.struct({
         content: t.String,
-        likes: t.list(t.ID(User))
+        likes: t.list(t.ID(this, User))
       }))
     })
   }

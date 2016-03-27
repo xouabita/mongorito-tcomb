@@ -10,7 +10,7 @@ function patch(Model) {
   class Son extends Model {
     constructor(...args) {
       super(...args)
-      this.haveShema = Boolean(this.Schema)
+      this.haveShemama = Boolean(this.Schema)
       if (!this.haveShema)
         console.warn("[Warning] No Schema!".yellow)
       if (this.haveShema &&
@@ -26,16 +26,6 @@ function patch(Model) {
         return
       this.before('save', 'validate')
       this.before('save', 'ensureUnique')
-    }
-
-    async validateIds() {
-      var ids = extractLists(this.attributes, this.ids)
-
-      for (var {path, type} of ids) {
-        var id = this.get(path)
-        if (id && !(await type.meta.Model.findById("" + id)))
-          throw new Error(`${path} have not a valid ID`)
-      }
     }
 
     async ensureUnique() {
@@ -54,10 +44,15 @@ function patch(Model) {
     }
 
     async validate() {
+      this.asyncValidations = []
       var val = t.validate(this.get(), this.Schema)
       if (!val.isValid())
         throw val.errors
-      return await this.validateIds()
+
+      for (var validator of this.asyncValidations) {
+        if (!(await validator()))
+          throw new Error(validator.msgError)
+      }
     }
   }
 
@@ -69,16 +64,18 @@ function unique(Type) {
 }
 
 var regexID = /^(?=[a-f\d]{24}$)(\d+[a-f]|[a-f]+\d)/i
-function ID(Model) {
-  let ref = t.refinement(t.String, (str) => {
-    if (regexID.test(str))
-      return true
-    else
+function ID(ctx, Model) {
+  return t.refinement(t.String, (str) => {
+    if (!regexID.test(str))
       return false
-  }, "ID")
-  ref.meta.Model = Model
-
-  return ref
+    ctx.asyncValidations.push(async () => {
+      const res = await Model.findById('' + str)
+      if (!res)
+        throw new Error(`${str} is not a valid ID for ${Model.name}`)
+      return true
+    })
+    return true
+  }, 'ID')
 }
 
 var Mongorito      = require('mongorito')
