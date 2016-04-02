@@ -74,3 +74,7 @@ It represent the ID of an element in the database.
 **Usage:** `t.ID(ctx, M)` where M is a Mongorito model and ctx the instance
 of the model  
 It ensure that ID is valid and exist in the database
+
+#### TODO
+
+- [ ] Find a way for Schema static access
